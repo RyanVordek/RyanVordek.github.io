@@ -1,38 +1,33 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ryan Vordek | Portefólio</title>
+    <title>Ryan Vordek | Portfólio</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
 
-    <canvas id="cosmic-canvas"></canvas>
+    <div id="webgl-container"></div>
 
     <main class="interface">
         <header class="profile-header">
             <div class="avatar-area">
-                <span class="terminal-symbol">~/</span>
-                <h1>Ryan Vordek</h1>
+                <h1>Ryan ʕ•ᴥ•ʔ Vordek</h1>
             </div>
-            <p class="tagline">Estudante de ADS & Desenvolvedor de Automação</p>
-            <p class="bio">
-                Focado em lógica pura, scripts eficientes em Python e otimização de sistemas. 
-                Construo ferramentas que eliminam processos repetitivos e resolvem problemas reais.
-            </p>
+            <p class="tagline">Estudante de ADS, desenvolvendo automação e sistemas.</p>
+            <div class="links">
+                <a href="https://github.com/RyanVordek" target="_blank">GitHub</a> -
+                <a href="#">Contato</a>
+            </div>
         </header>
 
         <section class="projects-section">
-            <h2 class="section-title">Repositórios & Aplicações</h2>
             <div id="projects-grid" class="projects-grid">
-                <div class="status-msg">A mapear galáxia de projetos...</div>
+                <div class="status-msg">Carregando repositórios e organizações...</div>
             </div>
         </section>
-
-        <footer class="main-footer">
-            <p>Conectado via GitHub API. Configuração limpa e minimalista.</p>
-        </footer>
     </main>
 
     <script src="script.js"></script>
