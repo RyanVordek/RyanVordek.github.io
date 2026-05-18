@@ -1,117 +1,128 @@
-// ==========================================
-// 1. CONFIGURAÇÃO THREE.JS (ESTÉTICA RONYNN)
-// ==========================================
-const container = document.getElementById('webgl-container');
-
-// Cena, Câmera e Renderizador
+// 1. WEBGL: DRACONIC REACTOR ENGINE
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
-container.appendChild(renderer.domElement);
+document.getElementById('webgl-container').appendChild(renderer.domElement);
 
-// O Globo Wireframe
-const sphereGeometry = new THREE.SphereGeometry(4, 32, 32);
-const sphereMaterial = new THREE.MeshBasicMaterial({ 
-    color: 0x88ccff, 
+// Luzes
+const light = new THREE.PointLight(0xff9d00, 2, 50);
+light.position.set(0, 0, 0);
+scene.add(light);
+
+// NÚCLEO (O Coração do Reator)
+const coreGeo = new THREE.IcosahedronGeometry(1.5, 2);
+const coreMat = new THREE.MeshBasicMaterial({ 
+    color: 0xff9d00, 
     wireframe: true,
     transparent: true,
-    opacity: 0.5
+    opacity: 0.8
 });
-const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-// Posiciona a esfera à direita, como no exemplo
-sphere.position.set(5, 0, -5); 
-scene.add(sphere);
+const core = new THREE.Mesh(coreGeo, coreMat);
+scene.add(core);
 
-// O Chão (Grid/Malha)
-const gridHelper = new THREE.GridHelper(40, 40, 0x444488, 0x222255);
-gridHelper.position.y = -4;
-scene.add(gridHelper);
+// ANÉIS ESTABILIZADORES (Torus)
+const rings = [];
+const createRing = (radius, color, rotationX, rotationY) => {
+    const geo = new THREE.TorusGeometry(radius, 0.02, 16, 100);
+    const mat = new THREE.MeshBasicMaterial({ color: color });
+    const ring = new THREE.Mesh(geo, mat);
+    ring.rotation.x = rotationX;
+    ring.rotation.y = rotationY;
+    scene.add(ring);
+    return ring;
+};
 
-camera.position.z = 5;
+rings.push(createRing(2.2, 0xa200ff, Math.PI/2, 0)); // Anel Roxo
+rings.push(createRing(2.5, 0xff9d00, 0, Math.PI/4));  // Anel Laranja
+rings.push(createRing(2.8, 0xffffff, Math.PI/4, Math.PI/4)); // Anel Branco
 
-// Animação e responsividade 3D
+// PARTÍCULAS DE ENERGIA
+const particlesGeo = new THREE.BufferGeometry();
+const particlesCount = 500;
+const posArray = new Float32Array(particlesCount * 3);
+
+for(let i=0; i < particlesCount * 3; i++) {
+    posArray[i] = (Math.random() - 0.5) * 15;
+}
+particlesGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+const particlesMat = new THREE.PointsMaterial({ size: 0.02, color: 0xa200ff });
+const particlesMesh = new THREE.Points(particlesGeo, particlesMat);
+scene.add(particlesMesh);
+
+camera.position.z = 6;
+
+// Loop de Animação
+let clock = new THREE.Clock();
 function animate() {
     requestAnimationFrame(animate);
-    sphere.rotation.y += 0.002;
-    sphere.rotation.x += 0.001;
+    const time = clock.getElapsedTime();
+
+    core.rotation.y += 0.01;
+    // Efeito Pulsação (Reactor Heartbeat)
+    const scale = 1 + Math.sin(time * 2) * 0.1;
+    core.scale.set(scale, scale, scale);
+
+    // Rotação dos anéis
+    rings[0].rotation.z += 0.01;
+    rings[1].rotation.x += 0.02;
+    rings[2].rotation.y += 0.015;
+
+    particlesMesh.rotation.y += 0.001;
+
     renderer.render(scene, camera);
 }
+animate();
 
+// Responsividade
 window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-animate();
 
+// 2. GITHUB API: SYNC ENGINE
+const EXCLUDE_REPOS = ['RyanVordek', 'RyanVordek.github.io']; 
 
-// ==========================================
-// 2. LÓGICA DE DADOS (USUÁRIO + ORGANIZAÇÃO)
-// ==========================================
-const grid = document.getElementById('projects-grid');
-
-// LISTA DE LIXO: Coloque aqui o nome exato dos repositórios que NÃO devem aparecer.
-const EXCLUDE_REPOS = [
-    'RyanVordek', 
-    'RyanVordek.github.io'
-]; 
-
-async function fetchAllRepos() {
+async function syncProjects() {
+    const grid = document.getElementById('projects-grid');
     try {
-        // Dispara as duas chamadas simultaneamente para não perder tempo
-        const [userResponse, orgResponse] = await Promise.all([
-            fetch('https://api.github.com/users/RyanVordek/repos?per_page=100'),
-            fetch('https://api.github.com/users/NarraLume-Project/repos?per_page=100')
+        const [res1, res2] = await Promise.all([
+            fetch('https://api.github.com/users/RyanVordek/repos'),
+            fetch('https://api.github.com/users/NarraLume-Project/repos')
         ]);
 
-        const userData = userResponse.ok ? await userResponse.json() : [];
-        const orgData = orgResponse.ok ? await orgResponse.json() : [];
+        const data1 = await res1.json();
+        const data2 = await res2.json();
+        
+        let allRepos = [...data1, ...data2]
+            .filter(repo => !repo.fork && !EXCLUDE_REPOS.includes(repo.name))
+            .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
 
-        // Junta tudo em um único array
-        let allRepos = [...userData, ...orgData];
-
-        // Filtro implacável: remove forks e repositórios da lista de exclusão
-        allRepos = allRepos.filter(repo => !repo.fork && !EXCLUDE_REPOS.includes(repo.name));
-
-        // Ordena por data de atualização (mais recente primeiro)
-        allRepos.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
-
-        grid.innerHTML = ''; // Limpa a mensagem de carregamento
-
-        if (allRepos.length === 0) {
-            grid.innerHTML = '<div class="status-msg">Nenhum repositório válido encontrado.</div>';
-            return;
-        }
+        grid.innerHTML = '';
 
         allRepos.forEach(repo => {
+            const isOrg = repo.owner.login === 'NarraLume-Project';
             const card = document.createElement('a');
-            card.className = 'project-item';
+            card.className = 'project-card';
             card.href = repo.html_url;
             card.target = '_blank';
-
-            const description = repo.description || 'Sem descrição. Você precisa documentar isso no GitHub.';
-            const language = repo.language || 'Code';
             
-            // Adiciona uma tag visual se o projeto for do NarraLume
-            const ownerTag = repo.owner.login === 'NarraLume-Project' ? ' <b>[NarraLume]</b>' : '';
-
             card.innerHTML = `
-                <div class="project-info">
-                    <h3>${repo.name}${ownerTag}</h3>
-                    <p>${description}</p>
+                <div>
+                    <h3>${repo.name}</h3>
+                    <p>${repo.description || 'Nenhuma descrição fornecida para este sistema.'}</p>
                 </div>
-                <span class="tech-lang">${language}</span>
+                <div class="project-footer">
+                    <span class="org-tag">${isOrg ? '[NARRALUME]' : '[PERSONAL]'}</span>
+                    <span>${repo.language || 'Code'}</span>
+                </div>
             `;
             grid.appendChild(card);
         });
-
-    } catch (error) {
-        console.error(error);
-        grid.innerHTML = '<div class="status-msg">Erro crítico ao buscar dados do GitHub API.</div>';
+    } catch (e) {
+        grid.innerHTML = '<p>Falha na sincronização de dados.</p>';
     }
 }
-
-fetchAllRepos();
+syncProjects();
