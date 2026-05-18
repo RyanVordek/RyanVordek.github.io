@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ryan ʕ•ᴥ•ʔ Vordek</title>
+    <title>Ryan Vordek | ADS & Automação</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
@@ -18,19 +21,24 @@
 
     <section id="home" class="hero-section">
         <div class="hero-content">
-            <h1>Ryan Vordek</h1>
-            <p class="tagline">Systems Development & Automation Specialist</p>
-            <div class="scroll-indicator">↓ Role para explorar</div>
+            <h1>Ryan_Vordek</h1>
+            <p class="tagline">>> Analista de Sistemas & Desenvolvedor de Automação</p>
+            <p class="sub-text">Construindo scripts, bots e arquiteturas otimizadas.</p>
         </div>
+        <div class="scroll-indicator">↓ Scroll</div>
     </section>
 
     <section id="projects" class="projects-section">
         <div class="section-header">
-            <h2>Galáxia de Projetos</h2>
-            <p>Sincronizado com NarraLume & Perfil Pessoal</p>
+            <h2>~/Repositorios</h2>
+            <div class="filter-group">
+                <button class="filter-btn active" data-filter="all">Todos</button>
+                <button class="filter-btn" data-filter="personal">Pessoal</button>
+                <button class="filter-btn" data-filter="narralume">NarraLume</button>
+            </div>
         </div>
-        <div id="projects-grid" class="projects-grid">
-            <div class="loading">Sincronizando com a API do GitHub...</div>
+        <div id="projects-list" class="projects-list">
+            <div class="loading">Buscando dados na API...</div>
         </div>
     </section>
 
