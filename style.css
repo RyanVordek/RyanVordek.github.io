@@ -1,103 +1,122 @@
 :root {
-    --bg-base: #1e1b2e; /* Tom escuro baseado na sua referência */
-    --text-main: #ffffff;
-    --text-muted: #a6adc8;
-    --accent: #b4befe;
-    --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --draconic-core: #ff9d00;
+    --draconic-chaos: #a200ff;
+    --bg-dark: #0a0a0f;
+    --text-white: #ffffff;
+    --text-dim: #888899;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 
 body {
-    background-color: var(--bg-base);
-    color: var(--text-main);
-    font-family: var(--font-stack);
+    background-color: var(--bg-dark);
+    color: var(--text-white);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     overflow-x: hidden;
-    min-height: 100vh;
 }
 
-/* Container do 3D */
 #webgl-container {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
     z-index: 1;
 }
 
-/* Interface de Texto */
-.interface {
+/* Navegação */
+.nav-menu {
+    position: fixed;
+    top: 20px; right: 40px;
+    z-index: 100;
+    display: flex; gap: 30px;
+}
+
+.nav-menu a {
+    color: var(--text-white);
+    text-decoration: none;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: color 0.3s;
+}
+.nav-menu a:hover { color: var(--draconic-core); }
+
+/* Home Section */
+.hero-section {
     position: relative;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     z-index: 2;
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 10vh 20px;
     pointer-events: none;
 }
 
-.interface * { pointer-events: auto; }
-
-.profile-header {
-    margin-bottom: 60px;
+.hero-content {
+    text-align: center;
 }
 
 h1 {
-    font-size: 3rem;
-    font-weight: normal;
-    letter-spacing: -0.02em;
+    font-size: 5rem;
+    font-weight: 200;
+    letter-spacing: -2px;
     margin-bottom: 10px;
 }
 
 .tagline {
+    color: var(--draconic-core);
     font-size: 1.2rem;
-    margin-bottom: 15px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
 }
 
-.links a {
-    color: var(--accent);
-    text-decoration: none;
+.scroll-indicator {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.8rem;
+    opacity: 0.5;
 }
 
-.links a:hover { text-decoration: underline; }
+/* Projetos Section */
+.projects-section {
+    position: relative;
+    background: rgba(10, 10, 15, 0.95);
+    min-height: 100vh;
+    padding: 100px 10%;
+    z-index: 3;
+    box-shadow: 0 -50px 100px rgba(0,0,0,1);
+}
 
-/* Grid de Projetos */
+.section-header { margin-bottom: 60px; border-left: 4px solid var(--draconic-chaos); padding-left: 20px; }
+.section-header h2 { font-size: 2.5rem; margin-bottom: 10px; }
+
 .projects-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
 }
 
-.project-item {
-    background: rgba(30, 27, 46, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 15px 20px;
-    border-radius: 6px;
+.project-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 30px;
+    border-radius: 4px;
     text-decoration: none;
     color: inherit;
-    transition: background 0.2s;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    transition: 0.4s;
+    display: flex; flex-direction: column; justify-content: space-between;
 }
 
-.project-item:hover {
-    background: rgba(255, 255, 255, 0.1);
+.project-card:hover {
+    background: rgba(162, 0, 255, 0.1);
+    border-color: var(--draconic-chaos);
+    transform: translateY(-5px);
 }
 
-.project-info h3 {
-    font-size: 1.1rem;
-    margin-bottom: 5px;
-    color: #fff;
-}
+.project-card h3 { color: var(--draconic-core); margin-bottom: 15px; }
+.project-card p { color: var(--text-dim); font-size: 0.9rem; line-height: 1.6; margin-bottom: 20px; }
 
-.project-info p {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-}
-
-.tech-lang {
-    font-size: 0.85rem;
-    color: var(--accent);
-    font-family: monospace;
-}
+.project-footer { display: flex; justify-content: space-between; font-size: 0.8rem; font-family: monospace; }
+.org-tag { color: var(--draconic-chaos); font-weight: bold; }
