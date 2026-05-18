@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ryan Vordek | Portfólio</title>
+    <title>Ryan ʕ•ᴥ•ʔ Vordek</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
@@ -11,24 +11,28 @@
 
     <div id="webgl-container"></div>
 
-    <main class="interface">
-        <header class="profile-header">
-            <div class="avatar-area">
-                <h1>Ryan ʕ•ᴥ•ʔ Vordek</h1>
-            </div>
-            <p class="tagline">Estudante de ADS, desenvolvendo automação e sistemas.</p>
-            <div class="links">
-                <a href="https://github.com/RyanVordek" target="_blank">GitHub</a> -
-                <a href="#">Contato</a>
-            </div>
-        </header>
+    <nav class="nav-menu">
+        <a href="#home">Início</a>
+        <a href="#projects">Repositórios</a>
+    </nav>
 
-        <section class="projects-section">
-            <div id="projects-grid" class="projects-grid">
-                <div class="status-msg">Carregando repositórios e organizações...</div>
-            </div>
-        </section>
-    </main>
+    <section id="home" class="hero-section">
+        <div class="hero-content">
+            <h1>Ryan Vordek</h1>
+            <p class="tagline">Systems Development & Automation Specialist</p>
+            <div class="scroll-indicator">↓ Role para explorar</div>
+        </div>
+    </section>
+
+    <section id="projects" class="projects-section">
+        <div class="section-header">
+            <h2>Galáxia de Projetos</h2>
+            <p>Sincronizado com NarraLume & Perfil Pessoal</p>
+        </div>
+        <div id="projects-grid" class="projects-grid">
+            <div class="loading">Sincronizando com a API do GitHub...</div>
+        </div>
+    </section>
 
     <script src="script.js"></script>
 </body>
